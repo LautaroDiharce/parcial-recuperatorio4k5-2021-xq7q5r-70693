@@ -46,7 +46,7 @@ import { LlamadasComponent } from './components/llamadas/llamadas.component';
         { path: 'inicio', component: InicioComponent },
         { path: 'articulos', component: ArticulosComponent },
         { path: 'articulosfamilias', component: ArticulosFamiliasComponent },
-        { path: 'llamdas', component: LlamadasComponent },
+        { path: 'llamadas', component: LlamadasComponent },
         //{ path: 'clientes', component: ClientesComponent },
         { path: 'ventas', component: VentasComponent },
         { path: 'ventasconsultas', component: VentasConsultasComponent },
