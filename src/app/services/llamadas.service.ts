@@ -12,16 +12,9 @@ export class LlamadasService {
     this.resourceUrl = environment.ConexionWebApiProxy + 'Llamadas/';
   }
 
-  get(Nombre: string, Habilitado: boolean) {
-    //console.log(Nombre);
+  get() {
+
     let params = new HttpParams();
-    if (Nombre != null) {
-      params = params.append('Nombre', Nombre);
-    }
-    if (Habilitado != null) {
-      params = params.append('Habilitado', Habilitado.toString());
-    }
-    //console.log(params);
     return this.httpClient.get(this.resourceUrl, { params: params });
   }
 

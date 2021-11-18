@@ -1,1 +1,201 @@
-<p>LLamadas works</p>
+<div class="tituloPagina">
+  {{ Titulo }} <small>{{ TituloAccionABMC[AccionABMC] }}</small>
+</div>
+
+<form name="FormBusqueda" [formGroup]="FormBusqueda">
+  <div class="container-fluid">
+    <hr />
+
+    <!-- Botones -->
+    <div class="row justify-content-center botones">
+      <button type="button" class="btn btn-primary" (click)="Buscar()">
+        <i class="fas fa-search"> </i> Buscar
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Tabla de resultados -->
+<div id="divTablaResultados" *ngIf="AccionABMC == 'L'">
+  <table class="table table-hover table-sm table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="text-center">Contacto</th>
+        <th class="text-center">Tipo de llamada</th>
+        <th class="text-center">Fecha de llamada</th>
+        <th class="text-center">Activa</th>
+        <th class="text-center text-nowrap">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let llamada of Llamadas">
+        <td>{{ llamada.Contacto }}</td>
+        <td class="text-right">{{ llamada.TipoLLamada }}</td>
+        <td class="text-right">{{ llamada.FechaLLamada }}</td>
+        <td>{{ llamada.Activa ? 'SI' : 'NO' }}</td>
+        <td class="text-center text-nowrap">
+          <button class="btn btn-sm btn-outline-primary" title="Modificar">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Registro en Alta,Modificacion y Consulta -->
+<form name="FormRegistro" [formGroup]="FormRegistro" *ngIf="AccionABMC != 'L'">
+  <div class="container-fluid">
+    <fieldset [disabled]="AccionABMC === 'C'">
+      <!--campo nombre-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label" for="Nombre"
+            >Nombre<span class="text-danger">*</span>:</label
+          >
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="Nombre"
+            [ngClass]="{
+              'is-invalid':
+                (FormRegistro.controls.Nombre.touched || submitted) &&
+                FormRegistro.controls.Nombre.errors
+            }"
+          />
+
+          <div
+            class="validacion"
+            *ngIf="
+              (FormRegistro.controls.Nombre.touched || submitted) &&
+              FormRegistro.controls.Nombre.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormRegistro.controls.Nombre.touched || submitted) &&
+              (FormRegistro.controls.Nombre.errors?.minlength ||
+                FormRegistro.controls.Nombre.errors?.maxlength)
+            "
+          >
+            Dato texto, 0 a 100 caracteres.
+          </div>
+        </div>
+      </div>
+      <!--campo Max pasajeros-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label" for="MaxPasajeros"
+            >MaxPasajeros<span class="text-danger">*</span>:</label
+          >
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <input
+            type="text"
+            name="MaxPasajeros"
+            class="form-control"
+            formControlName="MaxPasajeros"
+            [ngClass]="{
+              'is-invalid':
+                (FormRegistro.controls.MaxPasajeros.touched || submitted) &&
+                FormRegistro.controls.MaxPasajeros.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormRegistro.controls.MaxPasajeros.touched || submitted) &&
+              FormRegistro.controls.MaxPasajeros.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormRegistro.controls.MaxPasajeros.touched || submitted) &&
+              FormRegistro.controls.MaxPasajeros.errors?.pattern
+            "
+          >
+            Dato numérico, 1 a 7 dígitos.
+          </div>
+        </div>
+      </div>
+
+      <!--campo fechaalta-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label"
+            >Fecha de alta<span class="text-danger">*</span>:
+          </label>
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <input
+            class="form-control"
+            formControlName="FechaAlta"
+            name="FechaAlta"
+            [ngClass]="{
+              'is-invalid':
+                (FormRegistro.controls.FechaAlta.touched || submitted) &&
+                FormRegistro.controls.FechaAlta.errors
+            }"
+          />
+
+          <div
+            class="validacion"
+            *ngIf="
+              (FormRegistro.controls.FechaAlta.touched || submitted) &&
+              FormRegistro.controls.FechaAlta.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormRegistro.controls.FechaAlta.touched || submitted) &&
+              FormRegistro.controls.FechaAlta.errors?.pattern
+            "
+          >
+            Dato fecha, formato dd/mm/aaaa.
+          </div>
+        </div>
+      </div>
+
+      <!--campo Habilitado-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label" for="Habilitado">Habilitado:</label>
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <select
+            class="form-control"
+            name="Habilitado"
+            formControlName="Habilitado"
+          >
+            <option *ngFor="let opt of OpcionesActiva" [ngValue]="opt.Id">
+              ‌{{ opt.Nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+    <!-- Botones Grabar, Cancelar/Volver' -->
+    <hr />
+    <div class="row justify-content-center botones">
+      <button type="button" *ngIf="AccionABMC !== 'C'" class="btn btn-primary">
+        <i class="fas fa-check"></i> Grabar
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-warning" (click)="Volver()">
+        <i class="fas fa-undo"></i>
+        {{ AccionABMC == 'C' ? 'Volver' : 'Cancelar' }}
+      </button>
+    </div>
+  </div>
+</form>
