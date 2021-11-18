@@ -36,25 +36,26 @@ export class LlamadasComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.FormBusqueda = this.formBuilder.group({
-      Nombre: [''],
-      Activo: [null],
-    });
+    this.FormBusqueda = this.formBuilder.group({});
     this.FormRegistro = this.formBuilder.group({
       Id: [0],
-      Nombre: [
+      Contacto: [
         '',
         [
           Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(55),
+          Validators.minLength(1),
+          Validators.maxLength(50),
         ],
       ],
-      MaxPasajeros: [
+      TipoLlamada: [
         null,
-        [Validators.required, Validators.pattern('[0-9]{1,7}')],
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(50),
+        ],
       ],
-      FechaAlta: [
+      FechaLlamada: [
         '',
         [
           Validators.required,
@@ -63,23 +64,81 @@ export class LlamadasComponent implements OnInit {
           ),
         ],
       ],
-      Habilitado: [true],
+      Activa: [true],
     });
   }
   Volver() {
     this.AccionABMC = 'L';
   }
 
+  BuscarPorId(Llamada, AccionABMC) {
+    window.scroll(0, 0); // ir al incio del scroll
+
+    this.llamadasService.getById(Llamada.Id).subscribe((res: any) => {
+      this.FormRegistro.patchValue(res);
+
+      // debugger;
+      var arrFecha = res.FechaLLamada.substr(0, 10).split('-');
+      this.FormRegistro.controls.FechaLlamada.patchValue(
+        arrFecha[2] + '/' + arrFecha[1] + '/' + arrFecha[0]
+      );
+
+      this.AccionABMC = AccionABMC;
+    });
+  }
+
+  Modificar(Llamada) {
+    if (!Llamada.Activa) {
+      this.modalDialogService.Alert(
+        'No puede modificarse un registro Inactivo.'
+      );
+      return;
+    }
+    this.submitted = false;
+    this.FormRegistro.markAsUntouched();
+    this.BuscarPorId(Llamada, 'M');
+  }
   Buscar() {
     this.AccionABMC = 'L';
-    this.llamadasService
-      .get()
-      .subscribe((res: any) => {
-        this.Llamadas = res;
-        this.RegistrosTotal = res.RegistrosTotal;
-        //console.log(this.Hoteles);
+    this.llamadasService.get().subscribe((res: any) => {
+      this.Llamadas = res;
+      this.RegistrosTotal = res.RegistrosTotal;
+    });
+  }
+
+  Grabar() {
+    this.submitted = true;
+    // verificar que los validadores esten OK
+    if (this.FormRegistro.invalid) {
+      return;
+    }
+
+    //hacemos una copia de los datos del formulario, para modificar la fecha y luego enviarlo al servidor
+    const itemCopy = { ...this.FormRegistro.value };
+
+    //convertir fecha de string dd/MM/yyyy a ISO para que la entienda webapi
+    var arrFecha = itemCopy.FechaLlamada.substr(0, 10).split('/');
+    if (arrFecha.length == 3)
+      itemCopy.FechaLlamada = new Date(
+        arrFecha[2],
+        arrFecha[1] - 1,
+        arrFecha[0]
+      ).toISOString();
+
+    // agregar post
+    if (this.AccionABMC == 'A') {
+      this.llamadasService.post(itemCopy).subscribe((res: any) => {
+        this.Volver();
+        this.modalDialogService.Alert('Registro agregado correctamente.');
+        this.Buscar();
       });
-    //console.log(this.Hoteles);
-    //console.log(this.RegistrosTotal.toString());
+    } else {
+      // modificar put
+      this.llamadasService.put(itemCopy.Id, itemCopy).subscribe((res: any) => {
+        this.Volver();
+        this.modalDialogService.Alert('Registro modificado correctamente.');
+        this.Buscar();
+      });
+    }
   }
 }

@@ -13,7 +13,6 @@ export class LlamadasService {
   }
 
   get() {
-
     let params = new HttpParams();
     return this.httpClient.get(this.resourceUrl, { params: params });
   }
@@ -28,5 +27,9 @@ export class LlamadasService {
 
   delete(Id) {
     return this.httpClient.delete(this.resourceUrl + Id);
+  }
+  getById(Id: number) {
+    // console.log(this.httpClient.get(this.resourceUrl + Id))
+    return this.httpClient.get(this.resourceUrl + Id);
   }
 }

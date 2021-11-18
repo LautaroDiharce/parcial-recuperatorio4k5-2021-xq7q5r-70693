@@ -34,7 +34,11 @@
         <td class="text-right">{{ llamada.FechaLLamada }}</td>
         <td>{{ llamada.Activa ? 'SI' : 'NO' }}</td>
         <td class="text-center text-nowrap">
-          <button class="btn btn-sm btn-outline-primary" title="Modificar">
+          <button
+            class="btn btn-sm btn-outline-primary"
+            title="Modificar"
+            (click)="Modificar(llamada)"
+          >
             <i class="fas fa-pencil-alt"></i>
           </button>
         </td>
@@ -47,30 +51,30 @@
 <form name="FormRegistro" [formGroup]="FormRegistro" *ngIf="AccionABMC != 'L'">
   <div class="container-fluid">
     <fieldset [disabled]="AccionABMC === 'C'">
-      <!--campo nombre-->
+      <!--campo Contacto-->
       <div class="row">
         <div class="col-sm-4 col-md-3 offset-md-1">
-          <label class="col-form-label" for="Nombre"
-            >Nombre<span class="text-danger">*</span>:</label
+          <label class="col-form-label" for="Contacto"
+            >Contacto<span class="text-danger">*</span>:</label
           >
         </div>
         <div class="col-sm-8 col-md-6">
           <input
             type="text"
             class="form-control"
-            formControlName="Nombre"
+            formControlName="Contacto"
             [ngClass]="{
               'is-invalid':
-                (FormRegistro.controls.Nombre.touched || submitted) &&
-                FormRegistro.controls.Nombre.errors
+                (FormRegistro.controls.Contacto.touched || submitted) &&
+                FormRegistro.controls.Contacto.errors
             }"
           />
 
           <div
             class="validacion"
             *ngIf="
-              (FormRegistro.controls.Nombre.touched || submitted) &&
-              FormRegistro.controls.Nombre.errors?.required
+              (FormRegistro.controls.Contacto.touched || submitted) &&
+              FormRegistro.controls.Contacto.errors?.required
             "
           >
             Dato requerido.
@@ -78,39 +82,39 @@
           <div
             class="validacion"
             *ngIf="
-              (FormRegistro.controls.Nombre.touched || submitted) &&
-              (FormRegistro.controls.Nombre.errors?.minlength ||
-                FormRegistro.controls.Nombre.errors?.maxlength)
+              (FormRegistro.controls.Contacto.touched || submitted) &&
+              (FormRegistro.controls.Contacto.errors?.minlength ||
+                FormRegistro.controls.Contacto.errors?.maxlength)
             "
           >
-            Dato texto, 0 a 100 caracteres.
+            Dato texto, hasta 50 caracteres.
           </div>
         </div>
       </div>
-      <!--campo Max pasajeros-->
+      <!--campo Tipo-->
       <div class="row">
         <div class="col-sm-4 col-md-3 offset-md-1">
-          <label class="col-form-label" for="MaxPasajeros"
-            >MaxPasajeros<span class="text-danger">*</span>:</label
+          <label class="col-form-label" for="TipoLlamada"
+            >TipoLlamada<span class="text-danger">*</span>:</label
           >
         </div>
         <div class="col-sm-8 col-md-6">
           <input
             type="text"
-            name="MaxPasajeros"
+            name="TipoLlamada"
             class="form-control"
-            formControlName="MaxPasajeros"
+            formControlName="TipoLlamada"
             [ngClass]="{
               'is-invalid':
-                (FormRegistro.controls.MaxPasajeros.touched || submitted) &&
-                FormRegistro.controls.MaxPasajeros.errors
+                (FormRegistro.controls.TipoLlamada.touched || submitted) &&
+                FormRegistro.controls.TipoLlamada.errors
             }"
           />
           <div
             class="validacion"
             *ngIf="
-              (FormRegistro.controls.MaxPasajeros.touched || submitted) &&
-              FormRegistro.controls.MaxPasajeros.errors?.required
+              (FormRegistro.controls.TipoLlamada.touched || submitted) &&
+              FormRegistro.controls.TipoLlamada.errors?.required
             "
           >
             Dato requerido.
@@ -118,39 +122,39 @@
           <div
             class="validacion"
             *ngIf="
-              (FormRegistro.controls.MaxPasajeros.touched || submitted) &&
-              FormRegistro.controls.MaxPasajeros.errors?.pattern
+              (FormRegistro.controls.TipoLlamada.touched || submitted) &&
+              FormRegistro.controls.TipoLlamada.errors?.pattern
             "
           >
-            Dato numérico, 1 a 7 dígitos.
+            Dato texto, hasta 50 caracteres.
           </div>
         </div>
       </div>
 
-      <!--campo fechaalta-->
+      <!--campo fechallamada-->
       <div class="row">
         <div class="col-sm-4 col-md-3 offset-md-1">
           <label class="col-form-label"
-            >Fecha de alta<span class="text-danger">*</span>:
+            >Fecha de llamada<span class="text-danger">*</span>:
           </label>
         </div>
         <div class="col-sm-8 col-md-6">
           <input
             class="form-control"
-            formControlName="FechaAlta"
-            name="FechaAlta"
+            formControlName="FechaLlamada"
+            name="FechaLlamada"
             [ngClass]="{
               'is-invalid':
-                (FormRegistro.controls.FechaAlta.touched || submitted) &&
-                FormRegistro.controls.FechaAlta.errors
+                (FormRegistro.controls.FechaLlamada.touched || submitted) &&
+                FormRegistro.controls.FechaLlamada.errors
             }"
           />
 
           <div
             class="validacion"
             *ngIf="
-              (FormRegistro.controls.FechaAlta.touched || submitted) &&
-              FormRegistro.controls.FechaAlta.errors?.required
+              (FormRegistro.controls.FechaLlamada.touched || submitted) &&
+              FormRegistro.controls.FechaLlamada.errors?.required
             "
           >
             Dato requerido.
@@ -158,8 +162,8 @@
           <div
             class="validacion"
             *ngIf="
-              (FormRegistro.controls.FechaAlta.touched || submitted) &&
-              FormRegistro.controls.FechaAlta.errors?.pattern
+              (FormRegistro.controls.FechaLlamada.touched || submitted) &&
+              FormRegistro.controls.FechaLlamada.errors?.pattern
             "
           >
             Dato fecha, formato dd/mm/aaaa.
@@ -167,17 +171,13 @@
         </div>
       </div>
 
-      <!--campo Habilitado-->
+      <!--campo Activa-->
       <div class="row">
         <div class="col-sm-4 col-md-3 offset-md-1">
-          <label class="col-form-label" for="Habilitado">Habilitado:</label>
+          <label class="col-form-label" for="Activa">Activa:</label>
         </div>
         <div class="col-sm-8 col-md-6">
-          <select
-            class="form-control"
-            name="Habilitado"
-            formControlName="Habilitado"
-          >
+          <select class="form-control" name="Activa" formControlName="Activa">
             <option *ngFor="let opt of OpcionesActiva" [ngValue]="opt.Id">
               ‌{{ opt.Nombre }}
             </option>
@@ -188,7 +188,12 @@
     <!-- Botones Grabar, Cancelar/Volver' -->
     <hr />
     <div class="row justify-content-center botones">
-      <button type="button" *ngIf="AccionABMC !== 'C'" class="btn btn-primary">
+      <button
+        type="button"
+        *ngIf="AccionABMC !== 'C'"
+        class="btn btn-primary"
+        (click)="Grabar()"
+      >
         <i class="fas fa-check"></i> Grabar
       </button>
       &nbsp;
